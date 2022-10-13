@@ -17,4 +17,7 @@ class DirectorsView(Resource):
 class DirectorView(Resource):
     def get(self, did):
         director_one = Director.query.get(did)
-        return director_schema.dump(director_one), 200
+        if director_one:
+            return director_schema.dump(director_one), 200
+        else:
+            return director_schema.dump(director_one), 404

@@ -43,7 +43,10 @@ class MoviesView(Resource):
 class MovieView(Resource):
     def get(self, mid):
         movie = Movie.query.get(mid)
-        return movie_schema.dump(movie), 200
+        if movie:
+            return movie_schema.dump(movie), 200
+        else:
+            return movie_schema.dump(movie), 404
 
 
     def put(self, mid):

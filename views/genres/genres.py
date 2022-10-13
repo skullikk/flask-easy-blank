@@ -17,4 +17,7 @@ class GenresView(Resource):
 class GenreView(Resource):
     def get(self, gid):
         genre_one = Genre.query.get(gid)
-        return genre_schema.dump(genre_one), 200
+        if genre_one:
+            return genre_schema.dump(genre_one), 200
+        else:
+            return genre_schema.dump(genre_one), 404
