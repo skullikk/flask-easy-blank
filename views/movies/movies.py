@@ -47,10 +47,9 @@ class MoviesView(Resource):
             return "Conflict id", 409
         else:
             new_movie = Movie(**req_json)
-            print(new_movie)
             db.session.add(new_movie)
             db.session.commit()
-        return "Create", 201
+        return "Create", 201, {"location": f"/movies/{new_movie.id}"}
 
 @movie_ns.route('/<int:mid>')
 class MovieView(Resource):
