@@ -1,3 +1,4 @@
+# Файл моделей Movie, Director, Genre  и схем сериализации
 from marshmallow import Schema, fields
 
 from setup_db import db

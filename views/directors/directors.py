@@ -1,3 +1,4 @@
+# Неймспейс и представления для Director
 from flask_restx import Namespace, Resource
 
 from models import Director, directors_schema, director_schema

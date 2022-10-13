@@ -1,3 +1,4 @@
+# Неймспейс и представления для Movie
 from flask import request
 from flask_restx import Namespace, Resource
 
@@ -27,6 +28,7 @@ class MoviesView(Resource):
                 return movies_schema.dump(movies), 200
             else:
                 return 'Empty', 200
+        # Если есть ключ year - получаем его и выводим список фильмов. Если список пустой - выводим "Empty"
         elif year:
             movies = Movie.query.filter(Movie.year == year).all()
             if movies:

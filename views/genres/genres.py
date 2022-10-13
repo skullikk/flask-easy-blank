@@ -1,3 +1,4 @@
+# Неймспейс и представления для Genre
 from flask_restx import Namespace, Resource
 
 from models import Genre, genres_schema, genre_schema
