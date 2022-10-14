@@ -1,4 +1,5 @@
 # Неймспейс и представления для Director
+from flask import jsonify
 from flask_restx import Namespace, Resource
 
 from models import Director, directors_schema, director_schema
@@ -16,8 +17,9 @@ class DirectorsView(Resource):
 @director_ns.route('/<int:did>')
 class DirectorView(Resource):
     def get(self, did):
-        director_one = Director.query.get(did)
-        if director_one:
-            return director_schema.dump(director_one), 200
-        else:
-            return director_schema.dump(director_one), 404
+        director_one = Director.query.get_or_404(did)
+        return director_schema.dump(director_one)
+
+
+
+

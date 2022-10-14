@@ -16,8 +16,5 @@ class GenresView(Resource):
 @genre_ns.route('/<int:gid>')
 class GenreView(Resource):
     def get(self, gid):
-        genre_one = Genre.query.get(gid)
-        if genre_one:
-            return genre_schema.dump(genre_one), 200
-        else:
-            return genre_schema.dump(genre_one), 404
+        genre_one = Genre.query.get_or_404(gid)
+        return genre_schema.dump(genre_one)

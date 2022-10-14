@@ -1,5 +1,5 @@
 # Неймспейс и представления для Movie
-from flask import request
+from flask import request, jsonify
 from flask_restx import Namespace, Resource
 
 from models import Movie, movies_schema, movie_schema
@@ -33,20 +33,29 @@ class MoviesView(Resource):
             return movies_schema.dump(all_movies), 200
 
     def post(self):
+        # req_json = request.json
+        # new_movie = Movie(**req_json)
+        # db.session.add(new_movie)
+        # db.session.commit()
+        # return movie_schema.dump(new_movie), 201, {"location": f"/movies/{new_movie.id}"}
         req_json = request.json
-        new_movie = Movie(**req_json)
-        db.session.add(new_movie)
-        db.session.commit()
-        return movie_schema.dump(new_movie), 201, {"location": f"/movies/{new_movie.id}"}
+        req_json.pop('id', None)
+        try:
+            new_movie = Movie(**req_json)
+            db.session.add(new_movie)
+            db.session.commit()
+        except Exception:
+            db.session.rollback()
+            return "", 400, {"error": "Failed to create movie"}
+        else:
+            return movie_schema.dump(new_movie), 201, {"location": f"/movies/{new_movie.id}"}
 
 @movie_ns.route('/<int:mid>')
 class MovieView(Resource):
     def get(self, mid):
-        movie = Movie.query.get(mid)
-        if movie:
-            return movie_schema.dump(movie), 200
-        else:
-            return movie_schema.dump(movie), 404
+        movie = Movie.query.get_or_404(mid)
+        return movie_schema.dump(movie)
+
 
 
     def put(self, mid):
@@ -68,5 +77,5 @@ class MovieView(Resource):
         movie = Movie.query.get(mid)
         db.session.delete(movie)
         db.session.commit()
-        return movie_schema.dump(Movie.query.get(mid)), 204
+        return None, 204
 
